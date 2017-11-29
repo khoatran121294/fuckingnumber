@@ -10,7 +10,16 @@ class CurrentUsers extends React.Component {
                 <div className="list-group">
                     {
                         this.props.currentUsers.map((user, index) => {
-                            return <span key={index} className="list-group-item">{user.id !== this.props.userId ? user.id : <b>{user.id}</b>}</span>
+                            return (
+                                <span key={index} className="list-group-item">
+                                    {
+                                        user.id !== this.props.userId ? user.id : <b>ME</b>
+                                    }
+                                    {
+                                        this.props.fuckingUsers.indexOf(user.id) > -1 && <b style={{color: 'red'}}> - FUCKING WINNER</b>
+                                    }
+                                </span>
+                            )
                         })
                     }
                 </div>

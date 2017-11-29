@@ -18,6 +18,7 @@ http.listen(PORT, function () {
 let currentUsers = []
 let range = 10
 let timesToOpen = 10
+let fuckingUsers = []
 
 //socket transaction here
 io.on('connection', function (socket) {
@@ -43,6 +44,13 @@ io.on('connection', function (socket) {
     socket.on("client:new_game", function () {
         console.log("[LOG] - start new game ..")
         io.sockets.emit("server:new_game_all")
+        fuckingUsers = []
+    })
+
+    socket.on("client:fucking_user", function (userId) {
+        console.log("[LOG] - fucking user: " + userId)
+        fuckingUsers.push(userId)
+        io.sockets.emit("server:fucking_users", fuckingUsers)
     })
 })
 

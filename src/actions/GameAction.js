@@ -5,9 +5,7 @@ import {socket} from '../socket/socket-api'
 const _newGame = (numbers) => {
     return {
         type: GAME.NEW_GAME,
-        numbers,
-        openedNumbers: [],
-        isWinner: false
+        numbers
     }
 }
 
@@ -24,6 +22,14 @@ const _checkWinner = (isWinner, winnerRow, winnerCol) => {
         isWinner,
         winnerRow,
         winnerCol
+    }
+}
+
+export const _gameOver = (fuckingUsers, isGameOver) => {
+    return {
+        type: GAME.GAME_OVER,
+        fuckingUsers,
+        isGameOver
     }
 }
 
@@ -45,12 +51,12 @@ export function newGame() {
 
 export function openNumber() {
     return (dispatch, getState) => {
-        const { openedNumbers, isWinner, range, numbers, timesToOpen } = getState().GameReducer
+        const { range, numbers, isGameOver } = getState().GameReducer
         if (!numbers || !numbers[0] || !numbers[0][0]) {
             alert('Choose New Game to start before open any numbers ')
             return
         }
-        if (openedNumbers.length === timesToOpen || isWinner === true) {
+        if (isGameOver === true) {
             alert('Game is Over !\nChoose New Game to start again.')
             return
         }

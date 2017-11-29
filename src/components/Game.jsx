@@ -25,13 +25,16 @@ class Game extends React.Component {
             )
           }
           {
-            (this.props.isWinner === false && this.props.openedNumbers.length === this.props.timesToOpen) && (
+            (this.props.isWinner === false && this.props.isGameOver === true) && (
               <div className="alert alert-danger" role="alert">
                 <strong>So sorry !</strong><br />You are the Fucking Loser.
                           </div>
             )
           }
-          <CurrentUsers currentUsers={this.props.currentUsers} userId={this.props.userId} />
+          <CurrentUsers
+            currentUsers={this.props.currentUsers}
+            userId={this.props.userId}
+            fuckingUsers={this.props.fuckingUsers} />
         </div>
         <div className="col-md-9">
           <OpenedNumbers openedNumbers={this.props.openedNumbers} />
@@ -47,7 +50,6 @@ class Game extends React.Component {
 
   openNumberAndCheckResult() {
     this.props.openNumber()
-    this.props.checkWinner()
   }
 }
 
@@ -56,7 +58,6 @@ Game.propTypes = {
   openedNumbers: PropTypes.array.isRequired,
   numbers: PropTypes.array.isRequired,
   newGame: PropTypes.func.isRequired,
-  checkWinner: PropTypes.func.isRequired,
   timesToOpen: PropTypes.number.isRequired,
   range: PropTypes.number.isRequired
 }
@@ -71,9 +72,6 @@ Game.defaultProps = {
     throw new Error("Method is undefined")
   },
   openNumber: function () {
-    throw new Error("Method is undefined")
-  },
-  checkWinner: function () {
     throw new Error("Method is undefined")
   }
 }
