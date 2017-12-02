@@ -1,6 +1,6 @@
 import { GAME } from '../constants/ActionTypes'
 import FunctionUltils from '../FunctionUltils'
-import {socket} from '../socket/socket-api'
+import Socket from '../socket/socket-api'
 
 const _newGame = (numbers) => {
     return {
@@ -65,7 +65,7 @@ export function openNumber() {
         // dispatch(_openNumber(openedNumbers))
 
         // send numbers to server side
-        socket.emit("client:open_number", number);
+        Socket.getInstance().emit("client:open_number", number);
     }
 }
 

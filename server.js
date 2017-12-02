@@ -1,17 +1,35 @@
 const express = require('express')
 const path = require('path')
 const app = express()
+const bodyParser = require('body-parser');
 const http = require('http').Server(app)
 const io = require('socket.io')(http)
 const PORT = 8080
 
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.use('/static', express.static(path.join(__dirname, './build/static')))
-app.get('*', function(req, res) {  
-    res.sendFile(path.join( __dirname, './build/index.html'));
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*")
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+    next()
+})
+
+app.get('*', function (req, res) {
+    res.sendFile(path.join(__dirname, './build/index.html'))
+})
+
+app.post('/login', function (req, res) {
+    const user = req.body
+    console.log(req)
+    if ('admin' === user.username && '123456' === user.password) {
+        res.send(true)
+    }
+    res.send(false)
 })
 
 http.listen(PORT, function () {
-  console.log(`Example app listening on port ${PORT}!`)
+    console.log(`Example app listening on port ${PORT}!`)
 })
 
 
@@ -32,11 +50,12 @@ io.on('connection', function (socket) {
     socket.on('disconnect', function () {
         console.log(`[LOG] - socket ${socket.id} is disconnected.`)
         currentUsers = currentUsers.filter(user => user.id !== socket.id)
-        socket.broadcast.emit('server:send_current_sockets', currentUsers)
+        console.log(currentUsers)
+        socket.broadcast.emit('server:send_current_users', currentUsers)
     })
 
     // receive number and send to every users
-    socket.on("client:open_number", function(_number){
+    socket.on("client:open_number", function (_number) {
         console.log("[LOG] - client " + socket.id + " is send " + _number + " to admin")
         io.sockets.emit("server:send_opened_number", _number)
     })

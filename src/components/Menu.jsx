@@ -13,13 +13,13 @@ class Menu extends React.Component {
         const PopupSetting = (
             <div style={{
                 ...this.props.style,
-                width: 300,
+                width: 235,
                 position: 'absolute',
                 backgroundColor: '#fff',
                 boxShadow: '0 5px 10px rgba(0, 0, 0, 0.2)',
                 border: '1px solid #CCC',
                 borderRadius: 3,
-                marginLeft: -5,
+                marginLeft: 0,
                 marginTop: 5,
                 padding: 10,
                 zIndex: 999
@@ -62,7 +62,6 @@ class Menu extends React.Component {
                     <a className="list-group-item" onClick={this.props.newGame.bind(this)}>New Game</a>
                     <a className="list-group-item" onClick={this.props.openNumber.bind(this)}>Open New Number</a>
                 </div>
-
             </div>
         )
     }

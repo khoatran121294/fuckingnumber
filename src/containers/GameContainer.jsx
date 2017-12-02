@@ -2,7 +2,7 @@ import React from 'react'
 import Game from '../components/Game'
 import { connect } from 'react-redux'
 import { newGame, openNumber, checkWinner, updateSettings, _openNumber, _gameOver } from '../actions/GameAction'
-import {socket} from '../socket/socket-api'
+import Socket from '../socket/socket-api'
 
 class GameContainer extends React.Component {
     constructor() {
@@ -34,44 +34,44 @@ class GameContainer extends React.Component {
         )
     }
 
-    componentDidMount () {
+    componentDidMount() {
         const that = this
         const { openedNumbers } = this.props.data
         // display all current sockets
-        socket.on('server:send_current_users', function (currentUsers) {
+        Socket.getInstance().on('server:send_current_users', function (currentUsers) {
+            console.log(currentUsers)
             that.setState({
                 currentUsers,
-                userId: socket.id
+                userId: Socket.getInstance().id
             })
         })
- 
-        socket.on('server:send_opened_number', function (number) {
+
+        Socket.getInstance().on('server:send_opened_number', function (number) {
             that.updateOpenedNumber(number)
         })
 
-        socket.on('server:new_game_all', function () {
+        Socket.getInstance().on('server:new_game_all', function () {
             that.props._newGame()
         })
 
-        socket.on("server:fucking_users", function (fuckingUsers) {
-            console.log(fuckingUsers)
+        Socket.getInstance().on("server:fucking_users", function (fuckingUsers) {
             that.props._updateGameOver(fuckingUsers, true)
         })
     }
 
-    updateOpenedNumber (number) {
+    updateOpenedNumber(number) {
         const { openedNumbers } = this.props.data
         openedNumbers.push(number)
         this.props._updateOpenedNumber(openedNumbers)
         const isWinner = this.props._checkWinner()
         if (isWinner) {
-            socket.emit("client:fucking_user", this.state.userId)
+            Socket.getInstance().emit("client:fucking_user", this.state.userId)
         }
     }
 
-    updateNewGame () {
+    updateNewGame() {
         // send trigger new game to server
-        socket.emit("client:new_game")
+        Socket.getInstance().emit("client:new_game")
     }
 }
 
